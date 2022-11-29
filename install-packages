@@ -17,9 +17,9 @@ fi
 #Install packages
 sudo apt-get install tree software-properties-common \
        	             gnupg ninja-build gettext \
-		     libtool libtool-bin autoconf \
-		     automake cmake g++ pkg-config \
-		     unzip curl doxygen rustc -y
+		             libtool libtool-bin autoconf \
+		             automake cmake g++ pkg-config \
+		             unzip curl doxygen rustc rust-src -y
 
 #Update packages
 sudo apt --quiet update
