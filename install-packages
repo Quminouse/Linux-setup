@@ -19,7 +19,7 @@ sudo apt-get install tree software-properties-common \
        	             gnupg ninja-build gettext \
 		     libtool libtool-bin autoconf \
 		     automake cmake g++ pkg-config \
-		     unzip curl doxygen -y
+		     unzip curl doxygen rustc -y
 
 #Update packages
 sudo apt --quiet update
