@@ -1,17 +1,43 @@
 #!/bin/bash
 
-#Install tree
-sudo apt-get install tree -y
-
-#Install software-properties-common for latest nvim version
-sudo apt-get install software-properties-common -y
-sudo apt-get update
-
-#Install nvim
-sudo add-apt-repository ppa:neovim-ppa/stable -y
-sudo apt-get update
-sudo apt-get install neovim
+#Make downloads folder
+DOWNLOADS=~/Downloads
+if [ ! -d "$DOWNLOADS" ]; then
+	mkdir "$DOWNLOADS"
+fi
 
 #Install github cli
 sudo apt-get install gh
-sudo apt-get update
+
+#Auth if not already authenticated
+if [ ! gh auth-status ]; then
+	gh auth login
+fi
+
+#Install packages
+sudo apt-get install tree software-properties-common \
+       	             gnupg ninja-build gettext \
+		     libtool libtool-bin autoconf \
+		     automake cmake g++ pkg-config \
+		     unzip curl doxygen -y
+
+#Update packages
+sudo apt --quiet update
+
+#Install neovim
+NVIM_PATH=~/Downloads/neovim
+if [ ! -d "$NVIM_PATH" ]; then
+	git clone https://github.com/neovim/neovim "$NVIM_PATH"
+fi
+cd "$NVIM_PATH" && make CMAKE_BUILD_TYPE=Release
+sudo make --quiet install && cd ~ && export PATH=$PATH:"$NVIM_PATH"/build/bin/nvim \
+	&& echo 'export PATH=$PATH:~/Downloads/neovim/build/bin/nvim' >> ~/.bashrc
+
+#Install nvim package manager
+file_path=~/.local/share/nvim/site/pack/packer/start/packer.nvim
+if [ ! -e "$file_path" ]; then
+	git clone --depth 1 https://github.com/wbthomason/packer.nvim "$file_path"
+fi
+
+#Clone nvim config from github
+#TODO
