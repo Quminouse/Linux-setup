@@ -40,4 +40,7 @@ if [ ! -e "$file_path" ]; then
 fi
 
 #Clone nvim config from github
-#TODO
+file_path=~/.config/nvim/
+if [ ! -e "$file_path" ]; then
+	git clone --depth 1 https://github.com/Quminouse/qvim "$file_path"
+fi
