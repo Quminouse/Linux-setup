@@ -19,9 +19,11 @@ if ! command -v gh &> /dev/null; then
     && sudo apt install gh -y
 fi
 
-#Auth if not already authenticated
+#Auth if not already authenticated and add default git credentials
 if ! gh auth status >/dev/null 2>&1; then
     gh auth login
+    git config --global user.email = "jacksonpegg01@outlook.com"
+    git config --global user.name = "Quminouse"
 fi
 
 #Install packages
