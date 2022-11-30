@@ -3,6 +3,9 @@
 PACKAGES="tree gnupg ninja-build gettext libtool libtool-bin autoconf automake
 cmake g++ pkg-config unzip curl doxygen rustc rust-src"
 
+GIT_USER="Quminouse"
+GIT_EMAIL="jacksonpegg01@outlook.com"
+
 #Make downloads folder
 DOWNLOADS=~/Downloads
 if [ ! -d "$DOWNLOADS" ]; then
@@ -22,8 +25,8 @@ fi
 #Auth if not already authenticated and add default git credentials
 if ! gh auth status >/dev/null 2>&1; then
     gh auth login
-    git config --global user.email = "jacksonpegg01@outlook.com"
-    git config --global user.name = "Quminouse"
+    git config --global user.email = "$GIT_USER"
+    git config --global user.name = "$GIT_EMAIL"
 fi
 
 #Install packages
