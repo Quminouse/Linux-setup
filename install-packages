@@ -2,6 +2,7 @@
 
 PACKAGES="tree gnupg ninja-build gettext libtool libtool-bin autoconf automake
 cmake g++ pkg-config unzip curl doxygen rustc rust-src"
+MASON_PACKAGES="rust-analyzer codelldb"
 
 GIT_USER="Quminouse"
 GIT_EMAIL="jacksonpegg01@outlook.com"
@@ -72,5 +73,11 @@ fi
 
 #Install nvim packages
 nvim --headless -c "PackerInstall" -c qa
-nvim --headless -c "MasonInstall rust-analyzer codelldb" -c qa
-echo "\n Finished installing!"
+
+#Install mason packages
+file_path=~/.local/share/nvim/mason/packages
+for package in $MASON_PACKAGES; do
+    if [ ! -d "$file_path/$package" ]; then
+        nvim --headless -c "MasonInstall $package" -c qa
+    fi
+done
