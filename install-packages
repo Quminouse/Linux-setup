@@ -1,5 +1,8 @@
 #!/bin/bash
 
+PACKAGES="tree gnupg ninja-build gettext libtool libtool-bin autoconf automake
+cmake g++ pkg-config unzip curl doxygen rustc rust-src"
+
 #Make downloads folder
 DOWNLOADS=~/Downloads
 if [ ! -d "$DOWNLOADS" ]; then
@@ -7,30 +10,41 @@ if [ ! -d "$DOWNLOADS" ]; then
 fi
 
 #Install github cli
-if [ ! command -v gh >/dev/null 2>&1 ]; then
-    sudo apt-get install gh
+if ! command -v gh &> /dev/null; then
+    type -p curl >/dev/null || sudo apt install curl -y
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && sudo apt update \
+    && sudo apt install gh -y
 fi
 
 #Auth if not already authenticated
-if [ ! gh auth status >/dev/null 2>&1 ]; then
+if ! gh auth status >/dev/null 2>&1; then
     gh auth login
 fi
 
 #Install packages
-sudo apt-get install tree \
-       	             gnupg ninja-build gettext \
-		             libtool libtool-bin autoconf \
-		             automake cmake g++ pkg-config \
-		             unzip curl doxygen rustc rust-src -y
+to_install=""
+for package in $PACKAGES; do
+    PKG_OK=$(dpkg-query -W --showformat='${Status}\n' \
+        $package|grep "install ok installed")
+    if [ "" = "$PKG_OK" ]; then
+        to_install="$to_install package"
+    fi
+done
 
 #Update packages and autoremove
-sudo apt --quiet update
-sudo apt --quiet autoremove -y
+if [ "" != "$to_install" ]; then 
+    sudo apt-get install "$to_install"
+    sudo apt --quiet update
+    sudo apt --quiet upgrade -y
+    sudo apt --quiet autoremove -y
+fi
 
 #Install neovim
 NVIM_PATH=~/Downloads/neovim
-if [ ! command -v nvim >/dev/null 2>&1 ]; then
-
+if ! command -v nvim &> /dev/null; then
     if [ ! -d "$NVIM_PATH" ]; then
 	    git clone https://github.com/neovim/neovim "$NVIM_PATH"
     fi
@@ -47,6 +61,11 @@ fi
 
 #Clone nvim config from github
 file_path=~/.config/nvim/
-if [ ! -e "$file_path" ]; then
+if [ ! -d "$file_path" ]; then
 	git clone --depth 1 https://github.com/Quminouse/qvim "$file_path"
 fi
+
+#Install nvim packages
+nvim --headless -c "PackerInstall" -c qa
+nvim --headless -c "MasonInstall rust-analyzer codelldb" -c qa
+echo "\n Finished installing!"
