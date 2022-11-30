@@ -7,31 +7,37 @@ if [ ! -d "$DOWNLOADS" ]; then
 fi
 
 #Install github cli
-sudo apt-get install gh
+if [ ! command -v gh >/dev/null 2>&1 ]; then
+    sudo apt-get install gh
+fi
 
 #Auth if not already authenticated
-if [ ! gh auth-status ]; then
-	gh auth login
+if [ ! gh auth status >/dev/null 2>&1 ]; then
+    gh auth login
 fi
 
 #Install packages
-sudo apt-get install tree software-properties-common \
+sudo apt-get install tree \
        	             gnupg ninja-build gettext \
 		             libtool libtool-bin autoconf \
 		             automake cmake g++ pkg-config \
 		             unzip curl doxygen rustc rust-src -y
 
-#Update packages
+#Update packages and autoremove
 sudo apt --quiet update
+sudo apt --quiet autoremove -y
 
 #Install neovim
 NVIM_PATH=~/Downloads/neovim
-if [ ! -d "$NVIM_PATH" ]; then
-	git clone https://github.com/neovim/neovim "$NVIM_PATH"
+if [ ! command -v nvim >/dev/null 2>&1 ]; then
+
+    if [ ! -d "$NVIM_PATH" ]; then
+	    git clone https://github.com/neovim/neovim "$NVIM_PATH"
+    fi
+    cd "$NVIM_PATH" && make CMAKE_BUILD_TYPE=Release
+    sudo make --quiet install && cd ~ && export PATH=$PATH:"$NVIM_PATH"/build/bin/nvim \
+	    && echo 'export PATH=$PATH:~/Downloads/neovim/build/bin/nvim' >> ~/.bashrc
 fi
-cd "$NVIM_PATH" && make CMAKE_BUILD_TYPE=Release
-sudo make --quiet install && cd ~ && export PATH=$PATH:"$NVIM_PATH"/build/bin/nvim \
-	&& echo 'export PATH=$PATH:~/Downloads/neovim/build/bin/nvim' >> ~/.bashrc
 
 #Install nvim package manager
 file_path=~/.local/share/nvim/site/pack/packer/start/packer.nvim
