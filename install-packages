@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PACKAGES="tree gnupg ninja-build gettext libtool libtool-bin autoconf automake
-cmake g++ pkg-config unzip curl doxygen rustc rust-src"
+cmake g++ pkg-config unzip curl doxygen rustc rust-src ripgrep"
 MASON_PACKAGES="rust-analyzer codelldb"
 
 GIT_USER="Quminouse"
