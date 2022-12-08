@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGES="tree gnupg ninja-build gettext libtool libtool-bin autoconf automake
+PACKAGES="gnupg ninja-build gettext libtool libtool-bin autoconf automake
 cmake g++ pkg-config unzip curl doxygen rustc rust-src ripgrep"
 MASON_PACKAGES="rust-analyzer codelldb"
 
@@ -36,13 +36,13 @@ for package in $PACKAGES; do
     PKG_OK=$(dpkg-query -W --showformat='${Status}\n' \
         $package|grep "install ok installed")
     if [ "" = "$PKG_OK" ]; then
-        to_install="$to_install package"
+        to_install="$to_install $package"
     fi
 done
 
 #Update packages and autoremove
 if [ "" != "$to_install" ]; then 
-    sudo apt-get install "$to_install"
+    sudo apt-get install $to_install
     sudo apt --quiet update
     sudo apt --quiet upgrade -y
     sudo apt --quiet autoremove -y
