@@ -93,3 +93,11 @@ if [ ! -d $file_path ]; then
     cd $file_path && curl -fLo "$RAW_FONT_NAME" "$RAW_FONT_URL"
     fc-cache -fv
 fi
+
+#Install lazy git
+if ! command -v lazygit &> /dev/null; then
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep '"tag_name":' |  sed -E 's/.*"v*([^"]+)".*/\1/')
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_arm64.tar.gz"
+    sudo tar xf lazygit.tar.gz -C /usr/local/bin lazygit
+    rm ~/Downloads/lazygit.tar.gz
+fi
