@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGES="gnupg ninja-build gettext libtool libtool-bin autoconf automake
+PACKAGES="gnupg ninja-build gettext libtool libtool-bin autoconf automake w3m
 cmake g++ pkg-config unzip curl doxygen rustc rust-src ripgrep neovim-qt"
 
 MASON_PACKAGES="rust-analyzer codelldb"
