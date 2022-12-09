@@ -1,8 +1,12 @@
 #!/bin/bash
 
 PACKAGES="gnupg ninja-build gettext libtool libtool-bin autoconf automake
-cmake g++ pkg-config unzip curl doxygen rustc rust-src ripgrep"
+cmake g++ pkg-config unzip curl doxygen rustc rust-src ripgrep neovim-qt"
+
 MASON_PACKAGES="rust-analyzer codelldb"
+
+FONT_URL="https://github.com/JetBrains/JetBrainsMono/releases/download/v2.242/JetBrainsMono-2.242.zip"
+FONT_NAME="JetBrainsMono-2.242.zip"
 
 GIT_USER="Quminouse"
 GIT_EMAIL="jacksonpegg01@outlook.com"
@@ -81,3 +85,11 @@ for package in $MASON_PACKAGES; do
         nvim --headless -c "MasonInstall $package" -c qa
     fi
 done
+
+#Install any apply fonts
+file_path=~/.local/share/fonts
+if [ ! -d $file_path ]; then
+    mkdir $file_path && cd $file_path && wget -q $FONT_URL && unzip "$FONT_NAME" 
+    fc-cache -fv
+    rm -rf $file_path/$FONT_NAME
+fi
