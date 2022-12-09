@@ -61,6 +61,7 @@ if ! command -v nvim &> /dev/null; then
     cd "$NVIM_PATH" && make CMAKE_BUILD_TYPE=Release
     sudo make --quiet install && cd ~ && export PATH=$PATH:"$NVIM_PATH"/build/bin/nvim \
 	    && echo 'export PATH=$PATH:~/Downloads/neovim/build/bin/nvim' >> ~/.bashrc
+    rm $NVIM_PATH
 fi
 
 #Install nvim package manager
