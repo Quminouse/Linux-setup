@@ -5,8 +5,8 @@ cmake g++ pkg-config unzip curl doxygen rustc rust-src ripgrep neovim-qt"
 
 MASON_PACKAGES="rust-analyzer codelldb"
 
-FONT_URL="https://github.com/JetBrains/JetBrainsMono/releases/download/v2.242/JetBrainsMono-2.242.zip"
-FONT_NAME="JetBrainsMono-2.242.zip"
+RAW_FONT_URL="https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete%20Mono.ttf"
+RAW_FONT_NAME="Fira Code Regular Nerd Font Complete Mono.ttf"
 
 GIT_USER="Quminouse"
 GIT_EMAIL="jacksonpegg01@outlook.com"
@@ -89,7 +89,7 @@ done
 #Install any apply fonts
 file_path=~/.local/share/fonts
 if [ ! -d $file_path ]; then
-    mkdir $file_path && cd $file_path && wget -q $FONT_URL && unzip "$FONT_NAME" 
+    mkdir $file_path 
+    cd $file_path && curl -fLo "$RAW_FONT_NAME" "$RAW_FONT_URL"
     fc-cache -fv
-    rm -rf $file_path/$FONT_NAME
 fi
