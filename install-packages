@@ -87,7 +87,7 @@ for package in $MASON_PACKAGES; do
     fi
 done
 
-#Install any apply fonts
+#Install and apply fonts
 file_path=~/.local/share/fonts
 if [ ! -d $file_path ]; then
     mkdir $file_path 
